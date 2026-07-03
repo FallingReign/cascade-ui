@@ -7,7 +7,7 @@
       "name": "cascade-theme",
       "type": "registry:theme",
       "title": "Cascade Theme",
-      "description": "Cascade design-system tokens — a neutral, dark-capable palette tuned for productivity and IDE-like interfaces.",
+      "description": "Cascade design-system tokens — a neutral, dark-capable palette tuned for productivity and IDE-like interfaces. Single source of truth for colors, radii, typography, and shell-surface tokens.",
       "cssVars": {
         "theme": {
           "font-sans": "'Geist Variable', sans-serif",
@@ -41,7 +41,11 @@
           "sidebar-accent": "oklch(0.94 0.005 258)",
           "sidebar-accent-foreground": "oklch(0.28 0.02 258)",
           "sidebar-border": "oklch(0.90 0.004 260)",
-          "sidebar-ring": "oklch(0.65 0.01 260)"
+          "sidebar-ring": "oklch(0.65 0.01 260)",
+          "shell-toolbar": "oklch(1 0 0)",
+          "shell-toolbar-foreground": "oklch(0.13 0.008 260)",
+          "shell-statusbar": "oklch(0.96 0.003 260)",
+          "shell-statusbar-foreground": "oklch(0.52 0.01 258)"
         },
         "dark": {
           "background": "oklch(0.13 0.008 258)",
@@ -69,7 +73,11 @@
           "sidebar-accent": "oklch(0.24 0.008 258)",
           "sidebar-accent-foreground": "oklch(0.96 0.003 260)",
           "sidebar-border": "oklch(1 0 0 / 9%)",
-          "sidebar-ring": "oklch(0.50 0.008 260)"
+          "sidebar-ring": "oklch(0.50 0.008 260)",
+          "shell-toolbar": "oklch(0.17 0.008 258)",
+          "shell-toolbar-foreground": "oklch(0.96 0.003 260)",
+          "shell-statusbar": "oklch(0.15 0.008 258)",
+          "shell-statusbar-foreground": "oklch(0.63 0.008 260)"
         }
       }
     },
@@ -85,6 +93,26 @@
           "path": "registry/ui/file-tree.tsx",
           "type": "registry:ui",
           "target": "components/ui/file-tree.tsx"
+        }
+      ]
+    },
+    {
+      "name": "app-shell",
+      "type": "registry:ui",
+      "title": "App Shell",
+      "description": "The outer layout frame for Cascade and its consumers. Wires together a collapsible sidebar region, a top toolbar/perspective-switcher slot, a main content area, and an optional status-bar footer. All regions accept ReactNode — the shell ships structure only.",
+      "registryDependencies": [
+        "sidebar",
+        "separator",
+        "button",
+        "FallingReign/cascade-ui/cascade-theme"
+      ],
+      "dependencies": ["lucide-react"],
+      "files": [
+        {
+          "path": "registry/ui/app-shell.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/app-shell.tsx"
         }
       ]
     }

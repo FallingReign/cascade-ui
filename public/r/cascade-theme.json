@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "cascade-theme",
   "title": "Cascade Theme",
-  "description": "Cascade design-system tokens — a neutral, dark-capable palette tuned for productivity and IDE-like interfaces.",
+  "description": "Cascade design-system tokens — a neutral, dark-capable palette tuned for productivity and IDE-like interfaces. Single source of truth for colors, radii, typography, and shell-surface tokens.",
   "cssVars": {
     "theme": {
       "font-sans": "'Geist Variable', sans-serif",
@@ -36,7 +36,11 @@
       "sidebar-accent": "oklch(0.94 0.005 258)",
       "sidebar-accent-foreground": "oklch(0.28 0.02 258)",
       "sidebar-border": "oklch(0.90 0.004 260)",
-      "sidebar-ring": "oklch(0.65 0.01 260)"
+      "sidebar-ring": "oklch(0.65 0.01 260)",
+      "shell-toolbar": "oklch(1 0 0)",
+      "shell-toolbar-foreground": "oklch(0.13 0.008 260)",
+      "shell-statusbar": "oklch(0.96 0.003 260)",
+      "shell-statusbar-foreground": "oklch(0.52 0.01 258)"
     },
     "dark": {
       "background": "oklch(0.13 0.008 258)",
@@ -64,7 +68,11 @@
       "sidebar-accent": "oklch(0.24 0.008 258)",
       "sidebar-accent-foreground": "oklch(0.96 0.003 260)",
       "sidebar-border": "oklch(1 0 0 / 9%)",
-      "sidebar-ring": "oklch(0.50 0.008 260)"
+      "sidebar-ring": "oklch(0.50 0.008 260)",
+      "shell-toolbar": "oklch(0.17 0.008 258)",
+      "shell-toolbar-foreground": "oklch(0.96 0.003 260)",
+      "shell-statusbar": "oklch(0.15 0.008 258)",
+      "shell-statusbar-foreground": "oklch(0.63 0.008 260)"
     }
   },
   "type": "registry:theme"
