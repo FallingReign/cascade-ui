@@ -115,6 +115,78 @@
           "target": "components/ui/app-shell.tsx"
         }
       ]
+    },
+    {
+      "name": "perspective-switcher",
+      "type": "registry:ui",
+      "title": "Perspective Switcher",
+      "description": "An animated icon bar where the active perspective expands to a labelled pill. Direction-aware, keyboard accessible, reduced-motion aware. Adapted from beUI expandable-tabs (MIT). Uses motion/react. Slots into AppShell's toolbar slot.",
+      "registryDependencies": [
+        "FallingReign/cascade-ui/cascade-theme"
+      ],
+      "dependencies": ["motion", "lucide-react"],
+      "files": [
+        {
+          "path": "registry/ui/perspective-switcher.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/perspective-switcher.tsx"
+        }
+      ]
+    },
+    {
+      "name": "command-palette",
+      "type": "registry:block",
+      "title": "Command Palette",
+      "description": "Cmd/Ctrl-K fuzzy search palette with groups, keyboard navigation, and a React portal. Adapted from beUI command-palette (MIT). Uses motion/react for open/close animation.",
+      "registryDependencies": [
+        "FallingReign/cascade-ui/cascade-theme"
+      ],
+      "dependencies": ["motion", "lucide-react"],
+      "files": [
+        {
+          "path": "registry/ui/command-palette.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/command-palette.tsx"
+        }
+      ]
+    },
+    {
+      "name": "kanban-board",
+      "type": "registry:block",
+      "title": "Kanban Board",
+      "description": "Columnar status board with draggable cards. Columns derived from a status field; drag-to-move emits an onStatusChange callback. Built on @dnd-kit. No motion/react — CSS transitions only.",
+      "registryDependencies": [
+        "FallingReign/cascade-ui/cascade-theme"
+      ],
+      "dependencies": [
+        "@dnd-kit/core",
+        "@dnd-kit/sortable",
+        "@dnd-kit/utilities"
+      ],
+      "files": [
+        {
+          "path": "registry/ui/kanban-board.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/kanban-board.tsx"
+        }
+      ]
+    },
+    {
+      "name": "front-matter-editor",
+      "type": "registry:block",
+      "title": "Front Matter Editor",
+      "description": "Renders and edits a typed key-value metadata set (text, number, date, select, multiselect, boolean, textarea). Emits changes via onFieldChange callback. No motion/react — CSS transitions only.",
+      "registryDependencies": [
+        "FallingReign/cascade-ui/cascade-theme"
+      ],
+      "dependencies": [],
+      "files": [
+        {
+          "path": "registry/ui/front-matter-editor.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/front-matter-editor.tsx"
+        }
+      ]
     }
   ]
 }

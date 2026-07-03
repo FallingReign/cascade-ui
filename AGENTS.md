@@ -71,7 +71,10 @@ The registry is designed in layers; inner layers are built on top of outer ones:
 Level 0  cascade-theme         → Design tokens (colors, radii, fonts) — single source of truth
 Level 1  app-shell             → Outer frame (sidebar + toolbar + main + status-bar)
           file-tree            → Left sidebar navigation primitive
-Level 2  [future] regions      → Kanban board, editor perspective, docs view, etc.
+Level 2  perspective-switcher  → Animated tab bar that slots into AppShell toolbar
+          command-palette        → Cmd/Ctrl-K fuzzy search palette (portal)
+          kanban-board           → Drag-to-move status columns (main area)
+          front-matter-editor    → Typed key-value metadata editor (sidebar / panel)
 Level 3  [future] primitives   → Standalone cards, filters, task items, etc.
 ```
 
@@ -139,6 +142,10 @@ scale in component files — reference `bg-background`, `text-muted-foreground`,
 | `cascade-theme` | `registry:theme` | *(cssVars only, no files)* | Design tokens for light + dark |
 | `file-tree` | `registry:ui` | `registry/ui/file-tree.tsx` | Recursive collapsible file navigator |
 | `app-shell` | `registry:ui` | `registry/ui/app-shell.tsx` | Full outer layout shell |
+| `perspective-switcher` | `registry:ui` | `registry/ui/perspective-switcher.tsx` | Animated icon-bar → labelled pill; slots into `toolbar` prop |
+| `command-palette` | `registry:block` | `registry/ui/command-palette.tsx` | Cmd/Ctrl-K fuzzy palette; portal-rendered |
+| `kanban-board` | `registry:block` | `registry/ui/kanban-board.tsx` | Drag-to-move columnar board; emits `onStatusChange` |
+| `front-matter-editor` | `registry:block` | `registry/ui/front-matter-editor.tsx` | Typed key-value metadata editor; emits `onFieldChange` |
 
 ### `registryDependencies` rule
 
@@ -248,13 +255,72 @@ npx shadcn@latest add FallingReign/cascade-ui/app-shell
 
 ---
 
-## Consumption Contract (Cascade App)
+## Level 2 — Region Composites
+
+Regions slot into the Level-1 shell's named slots. They own **no layout chrome** —
+only the content inside the slot boundary. All use semantic tokens only.
+
+### Motion policy
+
+`motion/react` is **approved but scoped**:
+- ✅ `perspective-switcher` — expand/collapse animation on active tab
+- ✅ `command-palette` — open/close spring animation
+- ❌ `kanban-board` — CSS transitions only (`transition-colors`, `transition-shadow`)
+- ❌ `front-matter-editor` — CSS transitions only
+
+Do not add `motion` as a dependency to motion-free items. Always declare it
+per-item in `registry.json > dependencies`.
+
+### How regions compose into the shell
+
+```tsx
+<AppShell
+  toolbar={
+    // PerspectiveSwitcher goes into the toolbar slot
+    <PerspectiveSwitcher items={perspectives} onValueChange={setPerspective} />
+  }
+  sidebar={<FileTree nodes={tree} />}
+>
+  {/* KanbanBoard or FrontMatterEditor fill the main area */}
+  {perspective === "board" ? <KanbanBoard ... /> : <FrontMatterEditor ... />}
+</AppShell>
+
+{/* CommandPalette renders outside AppShell — it portals to <body> */}
+<CommandPalette items={commands} />
+```
+
+### Region item reference
+
+| Item | Shell slot | Key deps | motion? |
+|---|---|---|---|
+| `perspective-switcher` | `toolbar` | `motion` | ✅ |
+| `command-palette` | *(portal — outside shell)* | `motion`, `lucide-react` | ✅ |
+| `kanban-board` | `children` (main area) | `@dnd-kit/core`, `@dnd-kit/sortable`, `@dnd-kit/utilities` | ❌ |
+| `front-matter-editor` | `children` or sidebar panel | *(none beyond React)* | ❌ |
+
+### beUI attribution
+
+`perspective-switcher` and `command-palette` are adapted from
+[beUI v2](https://github.com/starc007/ui-components) (MIT).
+The beUI copyright notice is preserved in each source file's header comment.
+beUI is **not** imported as a package — sources are rewritten for Tailwind v4
+and cascade-ui's semantic tokens.
+
+---
+
+
 
 ```bash
 # One-off (from the Cascade app directory):
 npx shadcn@latest add FallingReign/cascade-ui/cascade-theme
 npx shadcn@latest add FallingReign/cascade-ui/file-tree
 npx shadcn@latest add FallingReign/cascade-ui/app-shell
+
+# Level 2 regions:
+npx shadcn@latest add FallingReign/cascade-ui/perspective-switcher
+npx shadcn@latest add FallingReign/cascade-ui/command-palette
+npx shadcn@latest add FallingReign/cascade-ui/kanban-board
+npx shadcn@latest add FallingReign/cascade-ui/front-matter-editor
 
 # Or add to Cascade's components.json > registries:
 # "@cascade": "FallingReign/cascade-ui"
