@@ -187,6 +187,23 @@
           "target": "components/ui/front-matter-editor.tsx"
         }
       ]
+    },
+    {
+      "name": "calendar-board",
+      "type": "registry:block",
+      "title": "Calendar Board",
+      "description": "Month/week calendar that lays files or tasks carrying a date onto a grid. Presentational — host supplies events and handles callbacks. Today highlighted; overflow (+N more); month navigation. No motion/react — CSS transitions only. Slots into AppShell's main area.",
+      "registryDependencies": [
+        "FallingReign/cascade-ui/cascade-theme"
+      ],
+      "dependencies": ["lucide-react"],
+      "files": [
+        {
+          "path": "registry/ui/calendar-board.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/calendar-board.tsx"
+        }
+      ]
     }
   ]
 }
