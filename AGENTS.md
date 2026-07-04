@@ -75,6 +75,7 @@ Level 2  perspective-switcher  → Animated tab bar that slots into AppShell too
           command-palette        → Cmd/Ctrl-K fuzzy search palette (portal)
           kanban-board           → Drag-to-move status columns (main area)
           front-matter-editor    → Typed key-value metadata editor (sidebar / panel)
+          calendar-board         → Month/week calendar of dated events (main area)
 Level 3  [future] primitives   → Standalone cards, filters, task items, etc.
 ```
 
@@ -146,6 +147,7 @@ scale in component files — reference `bg-background`, `text-muted-foreground`,
 | `command-palette` | `registry:block` | `registry/ui/command-palette.tsx` | Cmd/Ctrl-K fuzzy palette; portal-rendered |
 | `kanban-board` | `registry:block` | `registry/ui/kanban-board.tsx` | Drag-to-move columnar board; emits `onStatusChange` |
 | `front-matter-editor` | `registry:block` | `registry/ui/front-matter-editor.tsx` | Typed key-value metadata editor; emits `onFieldChange` |
+| `calendar-board` | `registry:block` | `registry/ui/calendar-board.tsx` | Month/week calendar; lays dated events on a grid; emits `onEventClick`, `onDayClick` |
 
 ### `registryDependencies` rule
 
@@ -297,6 +299,44 @@ per-item in `registry.json > dependencies`.
 | `command-palette` | *(portal — outside shell)* | `motion`, `lucide-react` | ✅ |
 | `kanban-board` | `children` (main area) | `@dnd-kit/core`, `@dnd-kit/sortable`, `@dnd-kit/utilities` | ❌ |
 | `front-matter-editor` | `children` or sidebar panel | *(none beyond React)* | ❌ |
+| `calendar-board` | `children` (main area) | `lucide-react` | ❌ |
+
+### `calendar-board` — props and usage
+
+```tsx
+import { CalendarBoard, type CalendarEvent } from "@/components/ui/calendar-board";
+
+// Event shape
+type CalendarEvent = {
+  id: string;
+  date: string;       // ISO date, e.g. "2025-08-15"
+  title: string;
+  status?: string;    // "todo" | "in-progress" | "review" | "done" -> colour dot
+  tags?: string[];
+};
+
+// CalendarBoardProps
+// events          CalendarEvent[]           -- required; host owns data
+// onEventClick    (id: string) => void      -- optional; fires on event pill click
+// onDayClick      (isoDate: string) => void -- optional; fires on day cell click
+// initialMonth    string                    -- "YYYY-MM" or "YYYY-MM-DD"; defaults to today's month
+// initialView     "month" | "week"          -- defaults to "month"
+// className       string
+
+<CalendarBoard
+  events={myEvents}
+  onEventClick={(id) => openDetail(id)}
+  onDayClick={(iso) => createEvent(iso)}
+/>
+```
+
+**Overflow:** up to 3 event pills shown per day cell in month view; remainder shown as `+N more`.
+**Install:**
+```bash
+npx shadcn@latest add FallingReign/cascade-ui/calendar-board
+```
+
+---
 
 ### beUI attribution
 
@@ -321,6 +361,7 @@ npx shadcn@latest add FallingReign/cascade-ui/perspective-switcher
 npx shadcn@latest add FallingReign/cascade-ui/command-palette
 npx shadcn@latest add FallingReign/cascade-ui/kanban-board
 npx shadcn@latest add FallingReign/cascade-ui/front-matter-editor
+npx shadcn@latest add FallingReign/cascade-ui/calendar-board
 
 # Or add to Cascade's components.json > registries:
 # "@cascade": "FallingReign/cascade-ui"

@@ -5,6 +5,7 @@ import { PerspectiveSwitcher, type PerspectiveItem } from "@/components/ui/persp
 import { CommandPalette, type CommandItem } from "@/components/ui/command-palette";
 import { KanbanBoard, type KanbanCard, type KanbanStatus } from "@/components/ui/kanban-board";
 import { FrontMatterEditor, type FrontMatterField } from "@/components/ui/front-matter-editor";
+import { CalendarBoard, type CalendarEvent } from "@/components/ui/calendar-board";
 import {
   LayoutDashboard,
   FileText,
@@ -15,6 +16,7 @@ import {
   GitBranch,
   Star,
   Trash2,
+  CalendarDays,
 } from "lucide-react";
 import "@/index.css";
 
@@ -52,8 +54,9 @@ const DEMO_TREE: FileTreeNode[] = [
 // Demo data — Perspective switcher
 // ---------------------------------------------------------------------------
 const PERSPECTIVES: PerspectiveItem[] = [
-  { id: "board", label: "Board", icon: <LayoutDashboard className="size-4" /> },
-  { id: "docs",  label: "Docs",  icon: <FileText className="size-4" /> },
+  { id: "board",    label: "Board",    icon: <LayoutDashboard className="size-4" /> },
+  { id: "docs",     label: "Docs",     icon: <FileText className="size-4" /> },
+  { id: "calendar", label: "Calendar", icon: <CalendarDays className="size-4" /> },
   { id: "timeline", label: "Timeline", icon: <Clock className="size-4" /> },
   { id: "settings", label: "Settings", icon: <Settings className="size-4" /> },
 ];
@@ -90,6 +93,32 @@ const INITIAL_CARDS: KanbanCard[] = [
   { id: "c6", title: "Front-matter editor",       status: "review",      priority: "medium", tags: ["dev"],        assignee: "JF" },
   { id: "c7", title: "Registry validation CI",    status: "todo",        priority: "low",    tags: ["infra"] },
   { id: "c8", title: "Dark mode visual QA",       status: "todo",        priority: "medium", tags: ["design", "qa"] },
+];
+
+// ---------------------------------------------------------------------------
+// Demo data — Calendar
+// ---------------------------------------------------------------------------
+
+function isoOffset(days: number): string {
+  const d = new Date();
+  d.setDate(d.getDate() + days);
+  return d.toISOString().slice(0, 10);
+}
+
+const CALENDAR_EVENTS: CalendarEvent[] = [
+  { id: "ev1",  date: isoOffset(0),   title: "Token audit review",         status: "in-progress", tags: ["design"] },
+  { id: "ev2",  date: isoOffset(0),   title: "Daily standup",              status: "done" },
+  { id: "ev3",  date: isoOffset(0),   title: "Fix focus ring regression",   status: "todo",        tags: ["dev"] },
+  { id: "ev4",  date: isoOffset(1),   title: "Calendar composite PR",      status: "in-progress", tags: ["dev"] },
+  { id: "ev5",  date: isoOffset(2),   title: "Dark mode QA pass",          status: "todo",        tags: ["qa"] },
+  { id: "ev6",  date: isoOffset(3),   title: "Registry validate & build",  status: "todo" },
+  { id: "ev7",  date: isoOffset(5),   title: "Kanban polish",              status: "review",      tags: ["dev"] },
+  { id: "ev8",  date: isoOffset(7),   title: "Sprint planning",            status: "todo" },
+  { id: "ev9",  date: isoOffset(7),   title: "Retrospective",              status: "todo" },
+  { id: "ev10", date: isoOffset(7),   title: "Design sync",                status: "todo" },
+  { id: "ev11", date: isoOffset(7),   title: "Overflow test event A",      status: "todo" },
+  { id: "ev12", date: isoOffset(-3),  title: "File-tree accessibility fix",status: "done",        tags: ["a11y"] },
+  { id: "ev13", date: isoOffset(-7),  title: "Level-2 region spec",       status: "done" },
 ];
 
 // ---------------------------------------------------------------------------
@@ -141,7 +170,7 @@ function SidebarFooterSlot() {
   );
 }
 
-type PerspectiveId = "board" | "docs" | "timeline" | "settings";
+type PerspectiveId = "board" | "docs" | "calendar" | "timeline" | "settings";
 
 function ToolbarSlot({
   activePerspective,
@@ -242,6 +271,25 @@ function DocsPerspective() {
   );
 }
 
+function CalendarPerspective() {
+  const [lastClick, setLastClick] = React.useState<string | null>(null);
+
+  return (
+    <div className="flex h-full flex-col overflow-hidden">
+      <CalendarBoard
+        events={CALENDAR_EVENTS}
+        onEventClick={(id) => setLastClick(`event: ${id}`)}
+        onDayClick={(iso) => setLastClick(`day: ${iso}`)}
+      />
+      {lastClick && (
+        <div className="shrink-0 border-t border-border px-4 py-1.5 text-xs text-muted-foreground">
+          Last click → {lastClick}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function TimelinePerspective() {
   return (
     <div className="flex h-full flex-col items-center justify-center gap-4 p-8">
@@ -270,6 +318,7 @@ export default function App() {
   const mainContent: Record<PerspectiveId, React.ReactNode> = {
     board:    <BoardPerspective />,
     docs:     <DocsPerspective />,
+    calendar: <CalendarPerspective />,
     timeline: <TimelinePerspective />,
     settings: <SettingsPerspective />,
   };
